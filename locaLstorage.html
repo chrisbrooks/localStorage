@@ -1,0 +1,49 @@
+<body>
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script>
+			(function (window, $, undefined) {
+
+				"use strict";
+
+				var methods	= {},
+					date = new Date(),
+					storedDate = localStorage.getItem("newdate"),
+					futureDate = new Date(storedDate),
+					endTime;
+
+				methods.init = function () {
+
+					if (localStorage.getItem("newdate") === null || date > futureDate) {
+						date.setHours(date.getHours()+1);
+						localStorage.setItem("newdate", new Date(date));
+						endTime = date.getTime() / 1000;
+					} else{
+						endTime = futureDate.getTime() / 1000;
+					}
+
+					function setClock() {
+					    var elapsed = new Date().getTime() / 1000;
+					    var totalSec =  endTime - elapsed;
+					    var d = parseInt( totalSec / 86400 );
+					    var h = parseInt( totalSec / 3600 ) % 24;
+					    var m = parseInt( totalSec / 60 ) % 60;
+					    var s = parseInt(totalSec % 60, 10);
+					    $('.timeRemaining').text(d+ " days, " + h + " hours, " + m + " minutes and " + s + " seconds until the date expires");
+					    setTimeout(setClock, 1000);
+					}
+
+					setClock();
+
+				};
+
+				methods.init();
+
+			}(window, jQuery));
+		</script>
+	<head>
+	<body>
+		<p class="timeRemaining"></p>
+	</body>
+</html>
